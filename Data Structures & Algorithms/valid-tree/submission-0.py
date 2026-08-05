@@ -1,0 +1,38 @@
+class Solution:
+    class UnionFind():
+        def __init__(self, n):
+            self.parent = [i for i in range(n)]
+            self.size = [1]*n
+        
+        def find(self, x):
+            if x != self.parent[x]:
+                self.parent[x] = self.find(self.parent[x])
+            return self.parent[x]
+    
+        def union(self, a, b):
+            root_a = self.find(a)
+            root_b = self.find(b)
+
+            if root_a == root_b:
+                return False
+            
+            if self.size[root_a] >= self.size[root_b]:
+                self.parent[root_b] = root_a
+                self.size[root_a] += self.size[root_b]
+            else:
+                self.parent[root_a] = root_b
+                self.size[root_b] += self.size[root_a]
+            return True
+    def validTree(self, n: int, edges: List[List[int]]) -> bool:
+        if len(edges) != n-1:
+            return False
+        
+        dsu = self.UnionFind(n)
+
+        for a, b in edges:
+            if not dsu.union(a,b):
+                return False
+        
+        return True
+
+        
